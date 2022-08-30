@@ -20,15 +20,15 @@ const ContactsEditor = ({ onAddContact }) => {
         setNumber(value)
         break
       default:
-        return
+        return null
     }
   }
 
   const handleSubmit = event => {
     event.preventDefault()
     onAddContact(name, number)
-    setName('')
-    setNumber('')
+    setName(' ')
+    setNumber(' ')
   }
 
   return (
