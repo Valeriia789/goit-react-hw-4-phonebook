@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { nanoid } from 'nanoid'
 
-import { ContactsList } from './Contacts/ContactsList'
+import { ContactList } from './ContactList/ContactList'
 import ContactsEditor from './ContactsEditor/ContactsEditor'
 import { Filter } from './Filter/Filter'
 
@@ -97,7 +97,7 @@ export default class App extends Component {
           <Filter value={filter} onUpdateFilter={this.updateFilter} />
 
           {filteredContacts.length > 0 && (
-            <ContactsList
+            <ContactList
               contacts={filteredContacts}
               onDeleteContact={this.deleteContact}
               onUpdateContact={this.updateGroup}

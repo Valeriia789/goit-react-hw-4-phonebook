@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { ListItem, DeleteButton } from './ContactsListItem.styled'
+import { ListItem, DeleteButton } from './ContactListItem.styled'
 
-export const ContactsListItem = ({
+export const ContactListItem = ({
   name,
   number,
   group,
@@ -26,7 +26,7 @@ export const ContactsListItem = ({
   </ListItem>
 )
 
-ContactsListItem.propTypes = {
+ContactListItem.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
   contacts: PropTypes.arrayOf(
