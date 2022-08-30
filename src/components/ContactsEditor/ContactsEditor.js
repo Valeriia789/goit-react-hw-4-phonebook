@@ -1,18 +1,16 @@
 import PropTypes from 'prop-types'
 
-import useLocalStorage from '../../hooks/useLocalStorage';
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 import { Form, Label, SubmitButton } from './ContactsEditor.styled'
 import { Input } from '../commonStyles/Input.styled'
 
-const ContactsEditor = () => {
+const ContactsEditor = ({ onAddContact }) => {
   const [name, setName] = useLocalStorage('name', '')
   const [number, setNumber] = useLocalStorage('number', '')
 
   const handleChange = event => {
     const { name, value } = event.target
-    console.log(name);
-    console.log(value);
 
     switch (name) {
       case 'contactName':
@@ -26,20 +24,11 @@ const ContactsEditor = () => {
     }
   }
 
-  // useEffect(() => {
-  //   console.log('contactName useEffect')
-  //   window.localStorage.setItem('contactName', JSON.stringify[contactName])
-  // }, [contactName])
-
-  // useEffect(() => {
-  //   console.log('contactNumber useEffect')
-  //   window.localStorage.setItem('contactNumber', JSON.stringify[contactNumber])
-  // }, [contactNumber])
-
   const handleSubmit = event => {
     event.preventDefault()
-    // this.props.onAddContact(this.state.name, this.state.number)
-    // this.setState({ name: '', number: '' })
+    onAddContact(name, number)
+    setName('')
+    setNumber('')
   }
 
   return (
@@ -78,14 +67,14 @@ const ContactsEditor = () => {
 }
 
 ContactsEditor.propTypes = {
-  // onAddContact: PropTypes.func.isRequired
+  onAddContact: PropTypes.func.isRequired
 }
 
 export default ContactsEditor
 
-  // ?? - заменяет || при присвоении значения,
-  //  правую часть вернет только в том случае, если слева стоит undefined или null
-  
+// ?? - заменяет || при присвоении значения,
+//  правую часть вернет только в том случае, если слева стоит undefined или null
+
 // так погано:
 // const [contactNumber, setContactNumber] = useState(
 //   JSON.parse(window.localStorage.getItem('contactNumber')) ?? ''
