@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { nanoid } from 'nanoid'
 
 import useLocalStorage from '../hooks/useLocalStorage'
@@ -8,18 +8,8 @@ import { Filter } from './Filter/Filter'
 
 const App = () => {
   const [contacts, setContacts] = useLocalStorage('contacts', [])
+
   const [filter, setFilter] = useState('')
-
-  useEffect(() => {
-    const savedContacts = localStorage.getItem('contacts')
-    if (savedContacts) {
-      setContacts([...savedContacts])
-    }
-  }, [])
-
-  useEffect(() => {
-      localStorage.setItem('contacts', JSON.stringify(contacts))
-  }, [contacts])
 
   const addContact = (name, number) => {
     const names = contacts.map(contact => contact.name)
@@ -85,11 +75,11 @@ const App = () => {
         <Filter value={filter} onUpdateFilter={updateFilter} />
 
         {filteredContacts.length > 0 && (
-        <ContactList
-          contacts={filteredContacts}
-          onDeleteContact={deleteContact}
-          onUpdateContact={updateGroup}
-        />
+          <ContactList
+            contacts={filteredContacts}
+            onDeleteContact={deleteContact}
+            onUpdateContact={updateGroup}
+          />
         )}
 
         <div>
@@ -108,3 +98,4 @@ const App = () => {
 }
 
 export default App
+
