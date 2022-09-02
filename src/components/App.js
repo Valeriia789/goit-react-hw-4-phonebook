@@ -13,7 +13,6 @@ const App = () => {
 
   const addContact = (name, number) => {
     const names = contacts.map(contact => contact.name)
-    console.log(names)
 
     if (names.find(myContact => myContact === name)) {
       alert(`${name} is already in contacts`)
