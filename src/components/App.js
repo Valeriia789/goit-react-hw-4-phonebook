@@ -1,122 +1,110 @@
 import React, { Component, useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
 
+import useLocalStorage from '../hooks/useLocalStorage'
 import { ContactList } from './ContactList/ContactList'
 import ContactsEditor from './ContactsEditor/ContactsEditor'
 import { Filter } from './Filter/Filter'
 
 const App = () => {
-  const [contacts, setContacts] = useState([])
+  const [contacts, setContacts] = useLocalStorage('contacts', [])
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
     const savedContacts = localStorage.getItem('contacts')
     if (savedContacts) {
-      setContacts(savedContacts)
+      setContacts([...savedContacts])
     }
   }, [])
 
-  // useEffect(() => {
-  //     // localStorage.setItem('contacts', contacts)
-  //     localStorage.setItem('contacts', JSON.stringify(contacts))
-  // }, [contacts])
+  useEffect(() => {
+      localStorage.setItem('contacts', JSON.stringify(contacts))
+  }, [contacts])
 
   const addContact = (name, number) => {
-    // const names = contacts.map(contact => contact.name)
-    // console.log(names);
-    console.log(name);
-    console.log(number);
+    const names = contacts.map(contact => contact.name)
+    console.log(names)
 
-    // if (names.find(myContact => myContact === name)) {
-    //   alert(`${name} is already in contacts`)
-    // } else {
+    if (names.find(myContact => myContact === name)) {
+      alert(`${name} is already in contacts`)
+    } else {
       const newContact = {
         id: nanoid(),
         name,
         number,
         group: false
       }
-     setContacts(state => ({
-      ...state,
-      ...newContact
-     }))
-    // }
+
+      setContacts(prevState => [...prevState, newContact])
+    }
   }
 
-  // deleteContact = contactId => {
-  //   this.setState(prevState => {
-  //     return {
-  //       contacts: prevState.contacts.filter(({ id }) => id !== contactId)
-  //     }
-  //   })
-  // }
+  const deleteContact = contactId => {
+    setContacts(contacts.filter(({ id }) => id !== contactId))
+  }
 
-  // updateGroup = contactId => {
-  //   this.setState(prevState => {
-  //     return {
-  //       contacts: prevState.contacts.map(contact => {
-  //         if (contact.id === contactId) {
-  //           return {
-  //             ...contact,
-  //             group: !contact.group
-  //           }
-  //         }
-  //         return contact
-  //       })
-  //     }
-  //   })
-  // }
-
-  // updateFilter = filter => {
-  //   this.setState({ filter })
-  // }
-
-  // getFilteredContacts = () => {
-  //   return this.state.contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(this.state.filter.toLowerCase())
-  //   )
-  // }
-
-    // const filteredContacts = this.getFilteredContacts()
-
-    // const closeFriendsGroup = contacts.filter(contact => contact.group)
-    // const totalContacts = contacts.length
-    // console.log(totalContacts);
-
-    return (
-      <>
-        <h2>Phonebook</h2>
-        <ContactsEditor onAddContact={addContact}></ContactsEditor>
-
-        <h2>Contacts</h2>
-        <div>
-          <Filter 
-          // value={filter} 
-          // onUpdateFilter={this.updateFilter} 
-          />
-
-          {/* {filteredContacts.length > 0 && ( */}
-            <ContactList
-            contacts={contacts}
-              // contacts={filteredContacts}
-              // onDeleteContact={this.deleteContact}
-              // onUpdateContact={this.updateGroup}
-            />
-          {/* )} */}
-
-          <div>
-            <p>
-              Total contacts: 
-              {/* {contacts.length} */}
-              </p>
-            <p>
-              Close friends: 
-              {/* {closeFriendsGroup.length} */}
-              </p>
-          </div>
-        </div>
-      </>
+  const updateGroup = contactId => {
+    setContacts(
+      contacts.map(contact => {
+        if (contact.id === contactId) {
+          return {
+            ...contact,
+            group: !contact.group
+          }
+        }
+        return contact
+      })
     )
+  }
+
+  const updateFilter = sort => {
+    setFilter(sort)
+  }
+
+  const getFilteredContacts = () => {
+    if (filter) {
+      return contacts.filter(contact =>
+        contact.name.toLowerCase().includes(filter.toLowerCase())
+      )
+    }
+    return contacts
+  }
+
+  const contsctsInGroup = contacts.filter(contact => contact.group)
+  const closeFriendsGroup = contsctsInGroup.length
+  const totalContacts = contacts.length
+  const filteredContacts = getFilteredContacts()
+
+  return (
+    <>
+      <h2>Phonebook</h2>
+      <ContactsEditor onAddContact={addContact}></ContactsEditor>
+
+      <h2>Contacts</h2>
+      <div>
+        <Filter value={filter} onUpdateFilter={updateFilter} />
+
+        {filteredContacts.length > 0 && (
+        <ContactList
+          contacts={filteredContacts}
+          onDeleteContact={deleteContact}
+          onUpdateContact={updateGroup}
+        />
+        )}
+
+        <div>
+          <p>
+            Total contacts:
+            {totalContacts}
+          </p>
+          <p>
+            Close friends:
+            {closeFriendsGroup}
+          </p>
+        </div>
+      </div>
+    </>
+  )
 }
 
 export default App

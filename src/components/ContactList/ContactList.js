@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { ContactListItem } from '../ContactListItem/ContactListItem'
 
 export const ContactList = ({ contacts, onDeleteContact, onUpdateContact }) => {
-  console.log(contacts)
   return (
     <>
       <ul>
@@ -13,8 +12,8 @@ export const ContactList = ({ contacts, onDeleteContact, onUpdateContact }) => {
             name={contact.name}
             number={contact.number}
             group={contact.group}
-            // onDelete={() => onDeleteContact(contact.id)}
-            // onUpdate={() => onUpdateContact(contact.id)}
+            onDelete={() => onDeleteContact(contact.id)}
+            onUpdate={() => onUpdateContact(contact.id)}
           />
         })
       : null }
@@ -24,8 +23,8 @@ export const ContactList = ({ contacts, onDeleteContact, onUpdateContact }) => {
 }
 
 ContactList.propTypes = {
-  // onDeleteContact: PropTypes.func.isRequired,
-  // onUpdateContact: PropTypes.func.isRequired,
+  onDeleteContact: PropTypes.func.isRequired,
+  onUpdateContact: PropTypes.func.isRequired,
   contacts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
